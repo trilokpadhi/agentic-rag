@@ -37,9 +37,8 @@ It refines these inputs into optimized queries, retrieves relevant Wikipedia doc
 2. **Install Dependencies**:
     ```bash
     pip install langchain openai
-    Set Up Environment Variables:
     ```
-3.  **Export your OpenAI API key**:
+3.  **Set Up Environment Variables - Export your OpenAI API key**:
     ```bash
     export OPENAI_API_KEY_TP="your-openai-api-key"
     ```
