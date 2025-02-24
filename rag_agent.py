@@ -179,7 +179,8 @@ class RAGAgent:
             if query:
                 try:
                     refined_query = self.refine_query(query, full_context)
-                    docs = self.retriever.get_relevant_documents(refined_query)
+                    # docs = self.retriever.get_relevant_documents(refined_query)
+                    docs = self.retriever.invoke(refined_query)
                     if not docs:
                         print(f"Warning: No documents retrieved for {modality} query: {refined_query}")
                     all_docs.extend(docs)

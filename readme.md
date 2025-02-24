@@ -1,5 +1,7 @@
 # Multimodal RAG Agent
 
+![Sample Image](images/arch2.png)
+
 This project implements a **Retrieval-Augmented Generation (RAG) Agent** designed to process multimodal queries—text, images, and graphs—and retrieve relevant information from Wikipedia. The agent refines queries, fetches documents, and generates responses using a combination of LangChain’s `WikipediaRetriever` and OpenAI’s GPT-4 model.
 
 ## Overview
