@@ -36,45 +36,6 @@ class RAGAgent:
         ])
         return response.content.strip()
 
-    def retrieve_documents(self, text_query=None, image_description=None, graph_description=None):
-        """
-        Retrieve documents for each modality, refining queries with full context.
-        
-        Args:
-            text_query (str, optional): The text query.
-            image_description (str, optional): Description of the image.
-            graph_description (str, optional): Description of the graph.
-        
-        Returns:
-            list: List of unique retrieved documents.
-        """
-        all_docs = []
-        full_context = " ".join(filter(None, [text_query, image_description, graph_description]))
-        
-        if text_query:
-            refined_query = self.refine_query(text_query, full_context)
-            docs = self.retriever.get_relevant_documents(refined_query)
-            all_docs.extend(docs)
-        
-        if image_description:
-            refined_query = self.refine_query(image_description, full_context)
-            docs = self.retriever.get_relevant_documents(refined_query)
-            all_docs.extend(docs)
-        
-        if graph_description:
-            refined_query = self.refine_query(graph_description, full_context)
-            docs = self.retriever.get_relevant_documents(refined_query)
-            all_docs.extend(docs)
-        
-        unique_titles = set()
-        unique_docs = []
-        for doc in all_docs:
-            title = doc.metadata.get('title', '')
-            if title not in unique_titles:
-                unique_titles.add(title)
-                unique_docs.append(doc)
-        
-        return unique_docs
 
     def create_unified_query(self, text_query, image_description, graph_description):
         """
@@ -96,45 +57,6 @@ class RAGAgent:
         ])
         return response.content
 
-
-    def retrieve_documents(self, text_query=None, image_description=None, graph_description=None):
-        all_docs = []
-        full_context = " ".join(filter(None, [text_query, image_description, graph_description]))
-        
-        # Modality-specific retrievals
-        if text_query:
-            refined_query = self.refine_query(text_query, full_context)
-            docs = self.retriever.invoke(refined_query)
-            all_docs.extend(docs)
-        
-        if image_description:
-            refined_query = self.refine_query(image_description, full_context)
-            docs = self.retriever.invoke(refined_query)
-            all_docs.extend(docs)
-        
-        if graph_description:
-            refined_query = self.refine_query(graph_description, full_context)
-            docs = self.retriever.invoke(refined_query)
-            all_docs.extend(docs)
-        
-        # Unified query retrieval
-        unified_query = self.create_unified_query(text_query, image_description, graph_description)
-        unified_docs = self.retriever.invoke(unified_query)
-        
-        # print('-'*100)
-        # print('unified docs', unified_docs)
-        all_docs.extend(unified_docs)
-        
-        # Remove duplicates
-        unique_titles = set()
-        unique_docs = []
-        for doc in all_docs:
-            title = doc.metadata.get('title', '')
-            if title not in unique_titles:
-                unique_titles.add(title)
-                unique_docs.append(doc)
-        
-        return unique_docs
 
     def generate_response(self, query, documents, additional_context):
         """
@@ -179,7 +101,6 @@ class RAGAgent:
             if query:
                 try:
                     refined_query = self.refine_query(query, full_context)
-                    # docs = self.retriever.get_relevant_documents(refined_query)
                     docs = self.retriever.invoke(refined_query)
                     if not docs:
                         print(f"Warning: No documents retrieved for {modality} query: {refined_query}")
